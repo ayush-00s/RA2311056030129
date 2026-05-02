@@ -1,46 +1,74 @@
-Backend Microservices submission for Afford Medical technologies.
+# Backend Microservices
 
-Vehicle maintenance scheduler
-Assigns vehicle maintenance tasks to depots using a "0/1 Knapsack algorithm" to maximize total impact within each depot's available mechanic hours.
+## 1. Logging Middleware
 
-To Run
+A reusable logging package that sends structured logs to a remote logging server.
 
-npm run vehicle:scheduling
+**Usage:**
+```js
+Log(stack, level, package, message)
+```
 
-2. Campus Notification Priority Inbox
+**Setup:**
+```bash
+cd logging_middleware
+npm install
+```
 
-REST API that fetches campus notifications (Placements, Events, Results) and returns the top N most important unread notifications ranked by type priority and recency.
+Create a `.env` file:
+TOKEN=your_bearer_token
 
-Endpoints:
 
-METHOD PATH DESCRIPTION
+---
 
-GET /api/vehicle-scheduling Run Depot scheduling
+## 2. Vehicle Maintenance Scheduler
 
-POST /api/notifications/refresh Pull Latest Notification
+Fetches depot and vehicle data from the test server and assigns maintenance tasks to each depot using a 0/1 Knapsack algorithm to maximize total impact score within available mechanic hours.
 
-GET /api/notifications/priority?n=10 Get top N priority
+**Setup:**
+```bash
+cd vehicle_maintence_scheduler
+npm install
+```
 
-PATCH /api/notifications/:id/read Mark A noticiation
+**Run:**
+```bash
+node index.js
+```
 
-RUN:
+**Endpoint:**
 
-npm start
+| Method | Path | Description |
+|---|---|---|
+| GET | /schedule | Returns optimized task schedule for all depots |
 
-SETUP: npm install
+---
 
-Create a .env file:
+## 3. Notification App
 
-BASE_URL=http://20.207.122.201/evaluation-service
+Fetches campus notifications and returns the top N most important ones ranked by type priority and recency.
 
-EMAIL=
+Priority order: Placement > Result > Event
 
-NAME=
+**Setup:**
+```bash
+cd notification_app_be
+npm install
+```
 
-ROLL_NO=
+**Run:**
+```bash
+node index.js
+```
 
-ACCESS_CODE=
+**Endpoint:**
 
-CLIENT_ID=
+| Method | Path | Description |
+|---|---|---|
+| GET | /priority-inbox?n=10 | Get top N priority notifications |
 
-CLIENT_SECRET=
+---
+
+## 4. Notification System Design
+
+See `notification_system_design.md` for the full system design covering REST API contracts, database schema, caching strategy, bulk notification handling, and priority inbox approach.
